@@ -7,7 +7,9 @@ class ChatsSpider(scrapy.Spider):
     name = "chats"
     allowed_domains = ['chatlogs.planetrdf.com']
     start_urls = ["https://chatlogs.planetrdf.com/swig/2014-06-01.html",
-                  "https://chatlogs.planetrdf.com/swig/2014-06-02.html", "https://chatlogs.planetrdf.com/swig/2014-06-03.html"]
+                  "https://chatlogs.planetrdf.com/swig/2014-06-02.html", "https://chatlogs.planetrdf.com/swig/2014-06-03.html",
+                  "https://chatlogs.planetrdf.com/swig/2014-06-04.html", "https://chatlogs.planetrdf.com/swig/2014-06-05.html"
+                  ]
 
     def parse(self, response):
         chatContainer = response.xpath("//div[@class='log']/p")
@@ -24,5 +26,5 @@ class ChatsSpider(scrapy.Spider):
                 "chat_hour": timeObj.hour,
                 "chat_minute": timeObj.minute,
                 "user": user,
-                "comment": comment
+                "chat_message": comment
             }
