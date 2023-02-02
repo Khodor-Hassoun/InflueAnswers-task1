@@ -1,12 +1,13 @@
 from pathlib import Path
-
+from datetime import datetime
 import scrapy
 
 
 class ChatsSpider(scrapy.Spider):
     name = "chats"
     allowed_domains = ['chatlogs.planetrdf.com']
-    start_urls = ["https://chatlogs.planetrdf.com/swig/2014-06-01.html"]
+    start_urls = ["https://chatlogs.planetrdf.com/swig/2014-06-01.html",
+                  "https://chatlogs.planetrdf.com/swig/2014-06-02.html", "https://chatlogs.planetrdf.com/swig/2014-06-03.html"]
 
     def parse(self, response):
         chatContainer = response.xpath("//div[@class='log']/p")
@@ -17,10 +18,11 @@ class ChatsSpider(scrapy.Spider):
             comment = paragraph.xpath("./span[3]/text()").get()
             if(isinstance(user, str)):
                 user = user[1: -1]
-
+            timeObj = datetime.strptime(time, "%H:%M:%S").time()
             yield {
                 "chat_date": chatDate,
-                "time": time,
+                "chat_hour": timeObj.hour,
+                "chat_minute": timeObj.minute,
                 "user": user,
                 "comment": comment
             }
